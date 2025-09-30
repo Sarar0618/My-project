@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tienda Frutas y Verduras</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="logo">FV</div>
+        <div>
+          <strong>Tienda Frutas & Verduras</strong><br>
+          <span class="muted">Prototipo funcional — carrito por peso (kg / lb)</span>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center">
+        <input id="searchInput" class="search" placeholder="Buscar producto..." oninput="renderCatalog()" style="width:360px">
+        <div style="text-align:right">
+          <div class="muted">Usuario: Cliente</div>
+          <div class="muted">Sucursal: Central</div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="catalog">
+        <!-- El nav de secciones se inserta dinámicamente por JS -->
+        <div id="catalogRoot">
+          <!-- Sections and subsections rendered by JS -->
+        </div>
+      </section>
+
+      <aside class="cart" id="cartRoot">
+        <h3>Carrito</h3>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <div class="unit-switch">Unidad: <strong id="unitLabel">kg</strong></div>
+          <div>
+            <label class="muted">Cambiar a: </label>
+            <button class="small" onclick="toggleUnit()">kg / lb</button>
+          </div>
+        </div>
+
+        <div id="cartItems"></div>
+
+        <div class="totals" id="cartTotals">
+          <!-- Totals -->
+        </div>
+
+        <div style="margin-top:12px;display:flex;gap:8px;flex-direction:column">
+          <button class="btn" onclick="checkout()">Simular Checkout</button>
+          <button class="small" onclick="clearCart()">Vaciar carrito</button>
+        </div>
+
+        <div style="margin-top:12px" class="muted"></div>
+      </aside>
+    </main>
+  </div>
+  <footer>
+    <p>&copy; 2025 Tienda Frutas y Verduras</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
