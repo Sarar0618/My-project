@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tienda Online</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="body">
+  <header>
+    <div class="brand">
+      <div class="logo">🍎</div>
+      <h1>Tienda Online de Productos Frescos</h1>
+    </div>
+    <div class="unit-switch">
+      <label>Unidad: <span id="unitLabel">kg</span></label>
+      <button class="btn small" onclick="toggleUnit()">Cambiar</button>
+    </div>
+  </header>
+  <main class="container">
+    <section class="catalog">
+      <input id="searchInput" class="search" type="text" placeholder="Buscar producto..." oninput="renderCatalog()">
+      <div id="catalogRoot"></div>
+    </section>
+    <aside class="cart">
+      <h3>🛒 Carrito de Compras</h3>
+      <div id="cartItems"></div>
+      <div id="cartTotals" class="totals"></div>
+      <button class="btn small" onclick="checkout()">Finalizar compra</button>
+      <button class="btn small" onclick="clearCart()">Vaciar carrito</button>
+    </aside>
+  </main>
+  <footer>
+    <p>&copy; 2025 Tienda Frutas y Verduras</p>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>
