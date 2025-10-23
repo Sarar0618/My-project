@@ -1,74 +1,12 @@
 
-    /***** Datos del catálogo *****/
-    
-    const CATALOG = [
-  {sectionId:'frutas', title:'Frutas Frescas', subsections:[
-    {id:'tropicales', title:'Frutas tropicales', products:[
-      {id:'mango', name:'Mango Ataulfo', pricePerKg:26000, img:'images/mango.jpg', desc:'Mango dulce, originario de climas cálidos. Ideal en postres y jugos.'},
-      {id:'pina', name:'Piña', pricePerKg:16800, img:'images/Piña_Oro.jpg', desc:'Piña jugosa, rica en vitamina C. Perfecta para ensaladas y jugos.'},
-      {id:'papaya', name:'Papaya', pricePerKg:15200, img:'Images/Papaya.jpg', desc:'Papaya suave, buena para la digestión.'}
-    ]},
-    {id:'citricas', title:'Frutas cítricas', products:[
-      {id:'naranja', name:'Naranja de Mesa', pricePerKg:10000, img:'images/Naranjas.jpg', desc:'Naranja fresca para jugo.'},
-      {id:'limon', name:'Limón Tahití', pricePerKg:12000, img:'images/Lemon.jpg', desc:'Limón aromático, ideal para aderezos.'},
-      {id:'mandarina', name:'Mandarina', pricePerKg:11600, img:'images/Mandarina.jpg', desc:'Mandarina dulce y fácil de pelar.'}
-    ]}
-  ]},
-
-  {sectionId:'verduras', title:'Verduras', subsections:[
-    {id:'hojas', title:'De hoja verde', products:[
-      {id:'espinaca', name:'Espinaca', pricePerKg:20000, img:'images/espinacas.jpg', desc:'Hoja verde rica en hierro.'},
-      {id:'lechuga', name:'Lechuga Batavia', pricePerKg:8800, img:'images/Lechuga.jpg', desc:'Crujiente, ideal para ensaladas.'},
-      {id:'acelga', name:'Acelga', pricePerKg:12400, img:'images/Acelga.jpg', desc:'Buena para salteados.'}
-    ]},
-    {id:'tuberculos', title:'Tubérculos', products:[
-      {id:'papa', name:'Papa Criolla', pricePerKg:8000, img:'images/Papa.jpg', desc:'Papa ideal para sancochos.'},
-      {id:'yuca', name:'Yuca', pricePerKg:7200, img:'images/yuca.jpg', desc:'Tubérculo energético para guisos.'},
-      {id:'zanahoria', name:'Zanahoria', pricePerKg:7600, img:'images/zanahoria.jpg', desc:'Rica en betacarotenos.'}
-    ]}
-  ]},
-
-  {sectionId:'hierbas', title:'Hierbas y Especias', subsections:[
-    {id:'herbas', title:'Hierbas frescas', products:[
-      {id:'cilantro', name:'Cilantro', pricePerKg:32000, img:'images/cilantro.jpg', desc:'Aporta aroma y sabor a muchos platos.'},
-      {id:'perejil', name:'Perejil', pricePerKg:30000, img:'images/perejil.jpg', desc:'Excelente para salsas.'},
-      {id:'albahaca', name:'Albahaca', pricePerKg:40000, img:'images/albahaca.jpg', desc:'Uso en pesto y pastas.'}
-    ]},
-    {id:'especias', title:'Especias secas', products:[
-      {id:'oregano', name:'Orégano seco', pricePerKg:160000, img:'images/oregano.jpg', desc:'Bolsa de 50g - aromático.'},
-      {id:'comino', name:'Comino', pricePerKg:140000, img:'images/comino.jpg', desc:'Bolsa de 50g - especia tradicional.'},
-      {id:'pimienta', name:'Pimienta negra', pricePerKg:220000, img:'images/pimienta.jpg', desc:'Bolsa de 50g - molida.'}
-    ]}
-  ]},
-
-  {sectionId:'organicos', title:'Orgánicos y Especiales', subsections:[
-    {id:'organicos', title:'Orgánicos certificados', products:[
-      {id:'tomate', name:'Tomate Orgánico', pricePerKg:27200, img:'images/tomate.jpg', desc:'Cultivado sin pesticidas.'},
-      {id:'pepino', name:'Pepino Orgánico', pricePerKg:18000, img:'images/pepino.jpg ', desc:'Crujiente y fresco.'},
-      {id:'aguacate', name:'Aguacate Orgánico', pricePerKg:48000, img:'images/aguacate.jpg ', desc:'Rico en grasas saludables.'}
-    ]},
-    {id:'exoticas', title:'Frutas exóticas', products:[
-      {id:'maracuya', name:'Maracuyá', pricePerKg:38000, img:'images/maracuya.jpg', desc:'Sabor ácido y aromático.'},
-      {id:'pitahaya', name:'Pitahaya', pricePerKg:56000, img:'images/pitaya.jpg', desc:'Color y textura única.'},
-      {id:'uchuva', name:'Uchuva', pricePerKg:100000, img:'images/uchuva.jpg', desc:'Pequeñas bayas tropicales.'}
-    ]}
-  ]}
-];
-
-
-  /***** Estado de la app *****/
-  let UNIT = 'kg'; // or 'lb'
+  let UNIT = 'kg';
   const KG_TO_LB = 2.20462;
   let cart = [];
-  let activeSectionId = CATALOG[0].sectionId; // Por defecto la primera sección
-
-    /***** Renderizado del catálogo con navegación por sección *****/
+  let activeSectionId = (window && window.INITIAL_SECTION) ? window.INITIAL_SECTION : CATALOG[0].sectionId; // Por defecto la primera sección
     function renderCatalog(){
       const root = document.getElementById('catalogRoot');
       root.innerHTML = '';
       const search = document.getElementById('searchInput').value.toLowerCase();
-
-      // Renderizar botones de navegación de secciones
       let nav = document.getElementById('catalogNav');
       if (!nav) {
         nav = document.createElement('nav');
@@ -78,14 +16,20 @@
       }
       nav.innerHTML = '';
       CATALOG.forEach(section => {
-        const btn = document.createElement('button');
-        btn.className = 'section-btn' + (section.sectionId === activeSectionId ? ' active' : '');
-        btn.textContent = section.title;
-        btn.onclick = () => { activeSectionId = section.sectionId; renderCatalog(); };
-        nav.appendChild(btn);
+        if (window && window.MULTI_PAGE) {
+          const a = document.createElement('a');
+          a.href = section.sectionId + '.html';
+          a.className = 'section-btn section-btn--' + section.sectionId + (section.sectionId === activeSectionId ? ' active' : '');
+          a.textContent = section.title;
+          nav.appendChild(a);
+        } else {
+          const btn = document.createElement('button');
+          btn.className = 'section-btn section-btn--' + section.sectionId + (section.sectionId === activeSectionId ? ' active' : '');
+          btn.textContent = section.title;
+          btn.onclick = () => { activeSectionId = section.sectionId; renderCatalog(); };
+          nav.appendChild(btn);
+        }
       });
-
-      // Buscar la sección activa
       const section = CATALOG.find(s => s.sectionId === activeSectionId);
       if (!section) return;
 
@@ -94,9 +38,8 @@
   const secH = document.createElement('h2'); secH.textContent = section.title; secDiv.appendChild(secH);
 
       section.subsections.forEach(sub => {
-        // filtrar productos por búsqueda
         const matched = sub.products.filter(p => (p.name + ' ' + p.desc).toLowerCase().includes(search));
-        if (matched.length === 0 && search) return; // omitir si no hay coincidencias
+        if (matched.length === 0 && search) return; 
 
         const subDiv = document.createElement('div');
         subDiv.className = 'subsection';
@@ -105,9 +48,13 @@
 
         const prodWrap = document.createElement('div'); prodWrap.className = 'products';
 
-        (search ? matched : sub.products).forEach(p => {
-          const card = document.createElement('div'); card.className = 'card';
-          const img = document.createElement('img'); img.src = p.img; card.appendChild(img);
+          (search ? matched : sub.products).forEach(p => {
+            const card = document.createElement('div'); card.className = 'card';
+            const imgSrc = (typeof p.img === 'string') ? p.img.trim() : '';
+            const img = document.createElement('img'); img.src = imgSrc; img.loading = 'lazy'; img.alt = p.name || 'Producto';
+           
+            img.onerror = function(){ this.onerror = null; this.src = 'images/placeholder.png'; };
+            card.appendChild(img);
           const h3 = document.createElement('h3'); h3.textContent = p.name; card.appendChild(h3);
           const d = document.createElement('div'); d.className = 'muted'; d.textContent = p.desc; card.appendChild(d);
 
@@ -115,12 +62,12 @@
           const priceDiv = document.createElement('div');
           const displayPrice = (UNIT === 'kg')? Math.round(p.pricePerKg) + ' / kg': Math.round(p.pricePerKg / KG_TO_LB) + ' / lb';
 
-          priceDiv.innerHTML = '<div style="font-weight:700">' + displayPrice + '</div>';
+          priceDiv.innerHTML = '<div class="price">' + displayPrice + '</div>';
           meta.appendChild(priceDiv);
 
           const controls = document.createElement('div');
           const qtyInput = document.createElement('input'); qtyInput.type = 'number'; qtyInput.min = '0.1'; qtyInput.step = '0.1'; qtyInput.value = '0.5'; qtyInput.className = 'qty';
-          const addBtn = document.createElement('button'); addBtn.className = 'btn small'; addBtn.textContent = 'Agregar';
+          const addBtn = document.createElement('button'); addBtn.className = 'btn small btn-add'; addBtn.textContent = 'AÑADIR';
           addBtn.onclick = () => addToCart(p.id, Number(qtyInput.value));
           controls.appendChild(qtyInput); controls.appendChild(addBtn);
           meta.appendChild(controls);
@@ -135,12 +82,9 @@
 
       root.appendChild(secDiv);
     }
-
-    /***** Carrito *****/
     function addToCart(productId, qty){
       if(!qty || qty<=0){alert('Ingrese una cantidad válida.');return}
-      // qty is in current UNIT
-      // convert qty to kg for internal storage
+      
       const qtyKg = (UNIT==='kg')? qty : qty / KG_TO_LB;
       const product = findProduct(productId);
       if(!product) return;
@@ -162,7 +106,10 @@
       cart.forEach(item=>{
         const p = findProduct(item.id);
         const row = document.createElement('div'); row.className='cart-item';
-        const img = document.createElement('img'); img.src=p.img; row.appendChild(img);
+  const imgSrc = (typeof p.img === 'string') ? p.img.trim() : '';
+  const img = document.createElement('img'); img.src = imgSrc; img.loading = 'lazy'; img.alt = p.name || 'Producto';
+  img.onerror = function(){ this.onerror = null; this.src = 'images/placeholder.png'; };
+  row.appendChild(img);
         const info = document.createElement('div'); info.style.flex='1';
         info.innerHTML = `<strong>${p.name}</strong><div class="muted">${p.desc}</div>`;
         row.appendChild(info);
@@ -213,17 +160,140 @@
 
     function checkout(){
       if(cart.length===0){ alert('Carrito vacío. Añade productos para simular checkout.'); return }
-      // Build summary
-      let summary = 'Resumen de compra:\n\n';
+      for(const item of cart){ if(!item.qtyKg || item.qtyKg <= 0){ alert('Revisa las cantidades en el carrito.'); return } }
+      const modal = document.getElementById('checkoutModal');
+      const body = document.getElementById('modalBody');
+      let html = '<ul>';
+      let total = 0;
       cart.forEach(item=>{
         const p = findProduct(item.id);
         const qty = item.qtyKg.toFixed(2) + ' kg';
-        summary += `${p.name} - ${qty} - subtotal: ${(p.pricePerKg*item.qtyKg).toFixed(2)}\n`;
+        const subtotal = Math.round(p.pricePerKg * item.qtyKg);
+        html += `<li><strong>${p.name}</strong> — ${qty} — subtotal: ${subtotal} pesos</li>`;
+        total += subtotal;
       });
-      const total = cart.reduce((s,i)=> s + findProduct(i.id).pricePerKg * i.qtyKg,0).toFixed(2);
-      summary += `\nTotal: ${total} pesos\n`;
-      alert(summary + '\n(Checkout simulado)');
+      html += `</ul><div style="margin-top:8px;font-weight:700">Total: ${Math.round(total)} pesos</div>`;
+      body.innerHTML = html;
+      modal.setAttribute('aria-hidden','false');
     }
 
-    // Init
-    renderCatalog(); renderCart();
+    function closeModal(){ const modal = document.getElementById('checkoutModal'); modal.setAttribute('aria-hidden','true'); }
+
+    function confirmCheckout(){
+      alert('Compra confirmada. Gracias por su compra (simulada).');
+      cart = []; renderCart(); closeModal();
+    }
+    (async function initData(){
+      try{
+        if(window.DB){
+          await migrateLocalUsersToDB();
+          await window.DB.seedProductsFromCatalog(CATALOG);
+        }
+      }catch(e){ console.warn('initData error', e); }
+      renderCatalog(); renderCart();
+    })();
+    function openAuthModal(){ document.getElementById('authModal').setAttribute('aria-hidden','false'); }
+    function closeAuthModal(){ document.getElementById('authModal').setAttribute('aria-hidden','true'); document.getElementById('authMsg').textContent=''; }
+
+ 
+    async function migrateLocalUsersToDB(){
+      try{
+        if(!window.DB) return;
+        const raw = localStorage.getItem('tfv_users');
+        if(!raw) return;
+        const users = JSON.parse(raw||'[]');
+        if(Array.isArray(users) && users.length>0){
+          const normalized = users.map(u=>({ email: u.email, passHash: u.passHash || (u.pass? u.pass : undefined) }));
+          await window.DB.bulkAddUsers(normalized);
+          localStorage.removeItem('tfv_users');
+        }
+      }catch(e){ console.warn('migrateLocalUsersToDB failed', e); }
+    }
+    async function getAllUsersFromStore(){
+      if(window.DB) return await window.DB.getAllUsers();
+      try{ return JSON.parse(localStorage.getItem('tfv_users')||'[]'); }catch(e){ return []; }
+    }
+    async function sha256Hex(str){
+      try{
+        if(window.crypto && crypto.subtle){
+          const enc = new TextEncoder();
+          const data = enc.encode(str);
+          const hash = await crypto.subtle.digest('SHA-256', data);
+          const bytes = new Uint8Array(hash);
+          return Array.from(bytes).map(b=>b.toString(16).padStart(2,'0')).join('');
+        } else {
+          let h = 0x811c9dc5;
+          for (let i=0;i<str.length;i++){
+            h ^= str.charCodeAt(i);
+            h = Math.imul(h, 16777619);
+          }
+          let hex = (h >>> 0).toString(16).padStart(8,'0');
+          return (hex+hex+hex+hex).slice(0,64);
+        }
+      }catch(e){
+        console.error('Hash error', e);
+        let s=''; for(let i=0;i<str.length;i++) s += str.charCodeAt(i).toString(16);
+        return s.slice(0,64).padEnd(64,'0');
+      }
+    }
+
+    async function signup(){
+      const email = document.getElementById('authEmail').value.trim();
+      const pass = document.getElementById('authPass').value;
+      const msg = document.getElementById('authMsg');
+      if(!email || !pass){ msg.textContent = 'Ingresa email y contraseña.'; return }
+      try{
+        const existing = window.DB ? await window.DB.getUser(email) : null;
+        if(existing){ msg.textContent='Usuario ya existe. Intenta ingresar.'; return }
+        const passHash = await sha256Hex(pass);
+        const userObj = { email, passHash };
+        if(window.DB){ await window.DB.addOrUpdateUser(userObj); }
+        else {
+          const users = getAllUsersFromStore(); users.push(userObj); localStorage.setItem('tfv_users', JSON.stringify(users));
+        }
+        msg.textContent='Registro exitoso. Ya puedes ingresar.'; document.getElementById('authEmail').value=''; document.getElementById('authPass').value='';
+      }catch(err){ console.error(err); msg.textContent='Error al registrar. Intenta nuevamente.'; }
+    }
+
+    async function login(){
+      const email = document.getElementById('authEmail').value.trim();
+      const pass = document.getElementById('authPass').value;
+      const msg = document.getElementById('authMsg');
+      if(!email || !pass){ msg.textContent = 'Ingresa email y contraseña.'; return }
+      try{
+        const passHash = await sha256Hex(pass);
+        let found = null;
+        if(window.DB){
+          const user = await window.DB.getUser(email);
+          if(user && (user.passHash===passHash || user.pass===pass)) found = user;
+        } else {
+          const users = await getAllUsersFromStore();
+          found = users.find(u=>u.email===email && (u.passHash===passHash || u.pass===pass));
+        }
+        if(!found){ msg.textContent='Credenciales inválidas.'; return }
+        if(!found.passHash){ found.passHash = passHash; delete found.pass; if(window.DB) await window.DB.addOrUpdateUser(found); else { const users = await getAllUsersFromStore(); /* replace */ }
+        }
+        localStorage.setItem('tfv_session', JSON.stringify({email}));
+        msg.textContent='Sesión iniciada.';
+        document.getElementById('loginBtn').textContent = 'Cerrar sesión';
+        document.getElementById('loginBtn').onclick = logout;
+        setTimeout(()=>{ closeAuthModal(); },700);
+      }catch(err){ console.error(err); document.getElementById('authMsg').textContent='Error al iniciar sesión.'; }
+    }
+
+  function logout(){ localStorage.removeItem('tfv_session'); document.getElementById('loginBtn').textContent='Iniciar sesión'; document.getElementById('loginBtn').onclick = openAuthModal; refreshProfileLink(); closeAuthModal(); }
+
+    function requireLoginForCheckout(){
+      const sess = localStorage.getItem('tfv_session');
+      if(!sess){ openAuthModal(); return false }
+      return true;
+    }
+    const originalCheckout = checkout;
+    checkout = function(){ if(!requireLoginForCheckout()) return; originalCheckout(); };
+    if(localStorage.getItem('tfv_session')){ document.getElementById('loginBtn').textContent='Cerrar sesión'; document.getElementById('loginBtn').onclick = logout; }
+    function refreshProfileLink(){
+      const profileLink = document.getElementById('profileLink');
+      if(!profileLink) return;
+      if(localStorage.getItem('tfv_session')) profileLink.style.display='inline-block'; else profileLink.style.display='none';
+    }
+    refreshProfileLink();

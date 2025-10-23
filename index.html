@@ -3,18 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Tienda online de frutas y verduras frescas. Compra por peso, cambia entre kg/lb y ve promociones activas.">
+  <meta name="author" content="Tienda Frutas y Verduras">
+  <link rel="canonical" href="https://example.com/">
+  <meta property="og:title" content="Tienda Frutas y Verduras">
+  <meta property="og:description" content="Compra frutas y verduras frescas por peso. Entregas rápidas y productos orgánicos.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="images/mango.jpg">
   <title>Tienda Online</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body class="body">
-  <header>
     <div class="brand">
-      <div class="logo">🍎</div>
+      <div class="logo"></div>
       <h1>Tienda Online de Productos Frescos</h1>
     </div>
     <div class="unit-switch">
       <label>Unidad: <span id="unitLabel">kg</span></label>
       <button class="btn small" onclick="toggleUnit()">Cambiar</button>
+      <button id="loginBtn" class="btn small" onclick="openAuthModal()">Iniciar sesión</button>
+      <a id="profileLink" href="profile.html" style="margin-left:8px;display:none" class="btn small">Perfil</a>
     </div>
   </header>
   <main class="container">
@@ -30,9 +38,95 @@
       <button class="btn small" onclick="clearCart()">Vaciar carrito</button>
     </aside>
   </main>
-  <footer>
-    <p>&copy; 2025 Tienda Frutas y Verduras</p>
+  <footer class="site-footer">
+    <div class="footer-inner container">
+      <div class="footer-col footer-about">
+        <h4>Tienda Frutas y Verduras Romero</h4>
+        <p class="muted">Productos frescos, directos del campo a tu mesa.</p>
+      </div>
+
+      <div class="footer-col footer-contact">
+        <h5>Contacto</h5>
+        <address>
+          <div>Dirección: Calle 18 #65A-28, Bogotá</div>
+          <div class="contact-line"> 
+            <svg class="icon" viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden>
+              <path d="M3 5a2 2 0 0 1 2-2h3l2 3h6a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5z" stroke="#6b7280" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <a href="tel:+573245278915">+57 324 527 8915</a>
+          </div>
+          <div class="contact-line">
+            <svg class="icon" viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden>
+              <path d="M3 8l9 6 9-6" stroke="#6b7280" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+              <rect x="3" y="5" width="18" height="14" rx="2" stroke="#6b7280" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <a href="mailto:Frutasyverdurasromero@yompail.com">Frutasyverdurasromero@yompail.com</a>
+          </div>
+          <div>Horario: Lun-Sab 8:00 - 18:00</div>
+        </address>
+      </div>
+
+      <div class="footer-col footer-socials">
+        <h5>Síguenos</h5>
+        <div class="social-links">
+          <a href="https://www.instagram.com/" target="_blank" rel="noopener">
+            <svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden>
+              <rect x="3" y="3" width="18" height="18" rx="5" stroke="#6b7280" stroke-width="1.2"/>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8" stroke="#6b7280" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="17.5" cy="6.5" r="0.5" fill="#6b7280"/>
+            </svg>
+            Instagram
+          </a>
+          <a href="https://www.facebook.com/" target="_blank" rel="noopener">
+            <svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden>
+              <path d="M18 2h-3a3 3 0 0 0-3 3v3H8v4h4v8h4v-8h3l1-4h-4V5a1 1 0 0 1 1-1h2V2z" stroke="#6b7280" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Facebook
+          </a>
+          <a href="https://web.whatsapp.com/" target="_blank" rel="noopener">
+            <svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden>
+              <path d="M21 11.5a9 9 0 1 1-3.1-6.36L21 3v8.5z" stroke="#6b7280" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M22 2l-6 6" stroke="#6b7280" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">&copy; 2025 Tienda Frutas y Verduras Romero</div>
+    </div>
   </footer>
+  <div id="checkoutModal" class="modal" aria-hidden="true">
+    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <h3 id="modalTitle">Resumen de la compra</h3>
+      <div id="modalBody"></div>
+      <div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end">
+        <button class="btn small" onclick="confirmCheckout()">Confirmar</button>
+        <button class="small" onclick="closeModal()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+  <div id="authModal" class="modal" aria-hidden="true">
+    <div class="modal-content" role="dialog" aria-modal="true">
+      <h3 id="authTitle">Iniciar sesión / Registrarse</h3>
+      <div id="authBody">
+        <div style="display:flex;gap:8px;margin-bottom:8px">
+          <input id="authEmail" type="email" placeholder="email@example.com" style="flex:1;padding:8px;border:1px solid #ddd;border-radius:6px">
+          <input id="authPass" type="password" placeholder="Contraseña" style="flex:1;padding:8px;border:1px solid #ddd;border-radius:6px">
+        </div>
+        <div style="display:flex;gap:8px;justify-content:flex-end">
+          <button class="btn small auth-btn auth-btn--login" onclick="login()">Ingresar</button>
+          <button class="btn small auth-btn auth-btn--signup" onclick="signup()">Registrarse</button>
+          <button class="small auth-btn auth-btn--close" onclick="closeAuthModal()">Cerrar</button>
+        </div>
+        <div id="authMsg" class="muted" style="margin-top:8px"></div>
+      </div>
+    </div>
+  </div>
+  <script src="data/db.js"></script>
+  <script src="data/catalog.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
+
