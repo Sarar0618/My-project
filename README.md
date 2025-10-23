@@ -1,6 +1,6 @@
-# Tienda Frutas y Verduras — Prototipo
+# Proyecto Tienda Frutas y Verduras Romero
 
-Este repositorio contiene un prototipo de una tienda online de frutas y verduras en HTML/CSS/JS puro. Está orientado a demostración local y entregas escolares/profesor.
+Este repositorio contiene un prototipo de una tienda online de frutas y verduras en HTML/CSS/JS puro. Está orientado a demostración local.
 
 Contenido principal
 - `index.html` — página principal (cliente).
@@ -42,14 +42,3 @@ Añadir imágenes
 Autenticación y seguridad
 - El prototipo hace hashing de contraseñas en el navegador usando SHA-256 (Web Crypto), con un fallback no criptográfico para entornos `file://`.
 - Para producción necesitas un backend y usar un KDF (PBKDF2 / Argon2) con salt y almacenamiento seguro.
-
-Siguientes pasos recomendados
-- Implementar un backend real (Express + SQLite/Postgres o usar Supabase/Firebase) para persistencia y autenticación segura.
-- Mejorar el KDF en cliente si no hay servidor (temporal).
-- Añadir pruebas unitarias y validación de inputs.
-
-Contacto
-- Si quieres que te ayude a desplegarlo o a convertir esto en una app full-stack, dime y te doy los pasos.
-
----
-Generado automáticamente por el asistente de desarrollo local.
