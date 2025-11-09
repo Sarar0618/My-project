@@ -14,34 +14,57 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body class="body">
+  <header class="site-header">
     <div class="brand">
-      <div class="logo"></div>
-      <h1>Tienda Online de Productos Frescos</h1>
-    </div>
-    <div class="unit-switch">
-      <label>Unidad: <span id="unitLabel">kg</span></label>
-      <button class="btn small" onclick="toggleUnit()">Cambiar</button>
-      <button id="loginBtn" class="btn small" onclick="openAuthModal()">Iniciar sesión</button>
-      <a id="profileLink" href="profile.html" style="margin-left:8px;display:none" class="btn small">Perfil</a>
+      <div class="logo" aria-hidden>
+        <img src="images/logo.jpg" alt="Green Corner - Productos Ecológicos" class="logo-img">
+      </div>
+      <h1>Green Corner</h1>
     </div>
   </header>
-  <main class="container">
+
+
+  <div class="body">
+    <div class="container topbar-inner">
+      <div class="search-box">
+        <input id="topSearch" class="search" type="text" placeholder="Buscar productos" oninput="(function(v){ const s=document.getElementById('searchInput'); if(s) s.value=v; renderCatalog(); })(this.value)">
+      </div>
+      <div class="actions">
+        <button id="loginBtnTop" class="btn small" onclick="openAuthModal()" style="margin-left:8px;">Iniciar sesión</button>
+      </div>
+    </div>
+  </div>
+
+  <section class="promo-banner" role="region" aria-label="Promociones y bienvenida">
+    <div class="promo-inner container">
+      <div class="hero-copy">
+        <div class="badge">Envío gratis - pedidos superiores a $100</div>
+        <h2 class="hero-title">Envío gratis en pedidos<br> superiores a <span class="accent">$100</span></h2>
+        <p class="muted">Envío gratis solo para clientes primerizos. Las promociones y descuentos se aplican según corresponda.</p>
+  <div style="margin-top:14px;"><button class="btn" onclick="openAuthModal('login')">Comprar ahora →</button></div>
+      </div>
+      <div class="hero-image" aria-hidden></div>
+      <div id="heroDots" class="hero-dots" aria-hidden="false"></div>
+    </div>
+  </section>
+  
+  <main >
     <section class="catalog">
-      <input id="searchInput" class="search" type="text" placeholder="Buscar producto..." oninput="renderCatalog()">
       <div id="catalogRoot"></div>
     </section>
-    <aside class="cart">
+    <aside class="body">
       <h3>🛒 Carrito de Compras</h3>
       <div id="cartItems"></div>
       <div id="cartTotals" class="totals"></div>
       <button class="btn small" onclick="checkout()">Finalizar compra</button>
       <button class="btn small" onclick="clearCart()">Vaciar carrito</button>
+       <button class="btn small" onclick="toggleUnit()">Cambiar a <span id="unitLabel">lb</span></button>
     </aside>
   </main>
   <footer class="site-footer">
     <div class="footer-inner container">
       <div class="footer-col footer-about">
-        <h4>Tienda Frutas y Verduras Romero</h4>
+        <h4>Green Corner</h4>
         <p class="muted">Productos frescos, directos del campo a tu mesa.</p>
       </div>
 
@@ -94,7 +117,7 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <div class="container">&copy; 2025 Tienda Frutas y Verduras Romero</div>
+      <div class="container">&copy; 2025 Green Corner</div>
     </div>
   </footer>
   <div id="checkoutModal" class="modal" aria-hidden="true">
@@ -108,24 +131,56 @@
     </div>
   </div>
   <div id="authModal" class="modal" aria-hidden="true">
-    <div class="modal-content" role="dialog" aria-modal="true">
-      <h3 id="authTitle">Iniciar sesión / Registrarse</h3>
-      <div id="authBody">
-        <div style="display:flex;gap:8px;margin-bottom:8px">
-          <input id="authEmail" type="email" placeholder="email@example.com" style="flex:1;padding:8px;border:1px solid #ddd;border-radius:6px">
-          <input id="authPass" type="password" placeholder="Contraseña" style="flex:1;padding:8px;border:1px solid #ddd;border-radius:6px">
+    <div class="modal-backdrop" onclick="closeAuthModal()" aria-hidden="true"></div>
+    <div class="modal-card auth-card" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+      <button class="modal-close" onclick="closeAuthModal()" aria-label="Cerrar">×</button>
+      <div class="auth-grid">
+        <div class="auth-content">
+          <h3 id="authTitle">Iniciar sesión</h3>
+
+          <div class="auth-tabs" role="tablist" aria-label="Autenticación">
+            <button id="tab-login" class="auth-tab active" role="tab" onclick="toggleAuthView('login')">Iniciar sesión</button>
+            <button id="tab-signup" class="auth-tab" role="tab" onclick="toggleAuthView('signup')">Registrarse</button>
+          </div>
+
+          <div class="auth-body">
+            <form id="loginForm" class="auth-form" onsubmit="event.preventDefault(); login();">
+              <label for="authEmail">Correo electrónico</label>
+              <input id="authEmail" type="email" placeholder="Correo electrónico" required>
+              <label for="authPass">Contraseña</label>
+              <input id="authPass" type="password" placeholder="Contraseña" required>
+              <div class="auth-actions"><button class="btn btn--primary" type="submit">Ingresar</button></div>
+              <div id="authMsg" class="muted" aria-live="polite"></div>
+            </form>
+
+            <form id="signupForm" class="auth-form" style="display:none;" onsubmit="event.preventDefault(); signup();">
+              <label for="authName">Nombre completo</label>
+              <input id="authName" type="text" placeholder="Nombre completo" required>
+              <label for="authEmailSignup">Correo electrónico</label>
+              <input id="authEmailSignup" type="email" placeholder="Correo electrónico" required>
+              <label for="authPassSignup">Contraseña</label>
+              <input id="authPassSignup" type="password" placeholder="Contraseña" required>
+              <div class="auth-actions"><button class="btn btn--primary" type="submit">Registrarse</button></div>
+              <div id="authMsgSignup" class="muted" aria-live="polite"></div>
+            </form>
+          </div>
+
+          <div class="auth-footer">¿Ya tienes una cuenta? <a href="javascript:toggleAuthView('login')">Iniciar sesión</a></div>
         </div>
-        <div style="display:flex;gap:8px;justify-content:flex-end">
-          <button class="btn small auth-btn auth-btn--login" onclick="login()">Ingresar</button>
-          <button class="btn small auth-btn auth-btn--signup" onclick="signup()">Registrarse</button>
-          <button class="small auth-btn auth-btn--close" onclick="closeAuthModal()">Cerrar</button>
+
+        <div class="auth-illustration" aria-hidden="true">
+          <img src="images/placeholder.jpg" alt="Productos frescos" />
         </div>
-        <div id="authMsg" class="muted" style="margin-top:8px"></div>
       </div>
     </div>
   </div>
   <script src="data/db.js"></script>
+  <script src="data/catalog.frutas.js"></script>
+  <script src="data/catalog.verduras.js"></script>
+  <script src="data/catalog.hierbas.js"></script>
+  <script src="data/catalog.organicos.js"></script>
   <script src="data/catalog.js"></script>
+  <script src="data/categories.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
